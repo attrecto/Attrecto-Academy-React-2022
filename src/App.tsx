@@ -6,15 +6,17 @@ interface AppProps {}
 
 interface AppState {
   counter: number;
+  errorMessage: string;
 }
 
 class App extends Component<AppProps, AppState> {
-  readonly state: AppState = { counter: 0 };
+  readonly state: AppState = { counter: 0, errorMessage: "" };
 
   setCounterValue = (increase: boolean) => {
     this.setState(({ counter }) => {
-      const newValue = increase ? counter + 1 : counter - 1;
-      return { counter: newValue };
+      const newValue = increase ? counter + 1 : Math.sign(counter) === 0 ? counter : counter - 1;
+      const newMessage = increase ? "" : Math.sign(counter) === 0 ? "Can't be negative!" : "";
+      return { counter: newValue, errorMessage: newMessage };
     });
   };
 
@@ -31,6 +33,7 @@ class App extends Component<AppProps, AppState> {
         <div className="container d-flex justify-content-center">
           <div className="card my-4  p-4 bg-white shadow text-center">
             <h5>Counter: {this.state.counter}</h5>
+            <h5>{this.state.errorMessage}</h5>
             <div className="d-flex justify-content-center flex-wrap gap-2">
               <button
                 className="btn btn-primary"
