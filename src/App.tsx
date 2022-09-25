@@ -6,20 +6,59 @@ interface AppProps {}
 
 interface AppState {
   counter: number;
+  notificationMessage: string;
+  isNotificationMSGHidden: boolean;
 }
 
 class App extends Component<AppProps, AppState> {
-  readonly state: AppState = { counter: 0 };
+  readonly state: AppState = { counter: 0, notificationMessage: "⠀", isNotificationMSGHidden: true };
+
+  setNotficationMessage = (message: string) => {
+    this.setState(({notificationMessage}) => {
+      return {notificationMessage: message};
+    });
+  };
+
+  setNotificationMessageHidden = (hiddenState: boolean) => {
+    this.setState(({isNotificationMSGHidden}) => {
+      return {isNotificationMSGHidden: hiddenState};
+    });
+  };
 
   setCounterValue = (increase: boolean) => {
     this.setState(({ counter }) => {
-      const newValue = increase ? counter + 1 : counter - 1;
-      return { counter: newValue };
+      var newValue = 0;
+      if (counter === 0 && !increase) {
+        if (this.state.isNotificationMSGHidden) {
+          this.setNotificationMessageHidden(false);
+          this.setNotficationMessage("A számláló nem mehet 0 alá!");
+          newValue = 0;
+        }
+        else if (!this.state.isNotificationMSGHidden) {
+          this.setNotficationMessage("A számláló nem mehet 0 alá!");
+          newValue = 0;
+        }
+      }
+      else if (counter === 0 && increase && !this.state.isNotificationMSGHidden) {
+        this.setNotificationMessageHidden(true);
+        this.setNotficationMessage("⠀");
+        newValue = counter + 1;
+      }
+      else if (increase) {
+        newValue = counter + 1;
+      }
+      else if (!increase) {
+        newValue = counter - 1;
+      }
+      return {counter: newValue};
     });
   };
 
   clearValue = () => {
-    this.setState({ counter: 0 });
+    if (!this.state.isNotificationMSGHidden) {
+      this.setNotificationMessageHidden(true);
+      this.setNotficationMessage("⠀");
+    }
   };
 
   render() {
@@ -47,6 +86,9 @@ class App extends Component<AppProps, AppState> {
               <button className="btn btn-danger" onClick={this.clearValue}>
                 Clear
               </button>
+            </div>
+            <div className="ntfMessageCard my-2 p-1 bg-black shadow text-center">
+              <h5 className="ntfMsg" style={{color: "white"}}>{this.state.notificationMessage}</h5>
             </div>
           </div>
         </div>
