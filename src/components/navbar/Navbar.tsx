@@ -6,7 +6,7 @@ import classes from "./Navbar.module.scss";
 
 const Navbar: FC = () => {
   return (
-    <nav className={classNames("navbar", "navbar-expand-lg", [classes.Navbar])}>
+    <nav className={classNames("navbar", "navbar-expand-sm", [classes.Navbar])}>
       <div className="ps-3 px-2 ">Welcome to Attrecto Academy</div>
 
       <div className="navbar-nav">
