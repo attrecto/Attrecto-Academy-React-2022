@@ -1,0 +1,11 @@
+
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
+
+
+const UserPage = () => { 
+  return (
+    <div>Hello</div>
+  );
+};
+
+export default UserPage;
