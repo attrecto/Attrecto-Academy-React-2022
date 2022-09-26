@@ -6,20 +6,22 @@ interface HomePageProps {}
 
 interface HomePageState {
   counter: number;
+  isNegative: boolean;
 }
 
 class HomePage extends Component<HomePageProps, HomePageState> {
-  readonly state: HomePageState = { counter: 0 };
+  readonly state: HomePageState = { counter: 0, isNegative: true };
 
   setCounterValue = (increase: boolean) => {
     this.setState(({ counter }) => {
       const newValue = increase ? counter + 1 : counter - 1;
-      return { counter: newValue };
+      const negative = (newValue >= 0)? true : false;
+      return { counter: negative ? newValue:0, isNegative: negative};
     });
   };
 
   clearValue = () => {
-    this.setState({ counter: 0 });
+    this.setState({ counter: 0, isNegative: true });
   };
 
   render() {
