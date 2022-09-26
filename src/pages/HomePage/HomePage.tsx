@@ -1,6 +1,7 @@
 import { Component } from "react";
 
 import Button from "../../components/button/Button";
+import Page from "../../components/page/Page";
 
 interface HomePageProps {}
 
@@ -24,27 +25,29 @@ class HomePage extends Component<HomePageProps, HomePageState> {
 
   render() {
     return (
-      <div className="container d-flex justify-content-center">
-        <div className="card my-4  p-4 bg-white shadow text-center">
-          <h5>Counter: {this.state.counter}</h5>
-          <div className="d-flex justify-content-center flex-wrap gap-2">
-            <Button onClick={() => this.setCounterValue(true)}>
-              Increase +
-            </Button>
+      <Page title="Home" noCard>
+        <div className="container d-flex justify-content-center">
+          <div className="card my-4  p-4 bg-white shadow text-center">
+            <h5>Counter: {this.state.counter}</h5>
+            <div className="d-flex justify-content-center flex-wrap gap-2">
+              <Button onClick={() => this.setCounterValue(true)}>
+                Increase +
+              </Button>
 
-            <Button
-              color="secondary"
-              onClick={() => this.setCounterValue(false)}
-            >
-              Decrease -
-            </Button>
+              <Button
+                color="secondary"
+                onClick={() => this.setCounterValue(false)}
+              >
+                Decrease -
+              </Button>
 
-            <Button color="danger" onClick={this.clearValue}>
-              Clear
-            </Button>
+              <Button color="danger" onClick={this.clearValue}>
+                Clear
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      </Page>
     );
   }
 }
