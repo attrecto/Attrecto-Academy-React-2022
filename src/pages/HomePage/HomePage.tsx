@@ -29,6 +29,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
       <div className="container d-flex justify-content-center">
         <div className="card my-4  p-4 bg-white shadow text-center">
           <h5>Counter: {this.state.counter}</h5>
+          <p>{this.state.isNegative ? "" : "Nem lehet negatív!"}</p>
           <div className="d-flex justify-content-center flex-wrap gap-2">
             <Button onClick={() => this.setCounterValue(true)}>
               Increase +
