@@ -5,6 +5,7 @@ import Navbar from "./components/navbar/Navbar";
 import BadgesPage from "./pages/BadgesPage/BadgesPage";
 import HomePage from "./pages/HomePage/HomePage";
 import UsersPage from "./pages/UsersPage/UsersPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 interface AppProps {}
 
@@ -21,11 +22,12 @@ class App extends Component<AppProps, AppState> {
           <Navbar />
         </header>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/badges" element={<BadgesPage />} />
-
-          <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route path="/error" element={<ErrorPage />} />
+          <Route path="*" element={<Navigate to="/error" replace />} />
         </Routes>
       </div>
     );
