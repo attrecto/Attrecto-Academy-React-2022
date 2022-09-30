@@ -4,22 +4,48 @@ import Navbar from "./components/navbar/Navbar";
 
 interface AppProps {}
 
+
+
+
 interface AppState {
   counter: number;
+  alert: boolean;
 }
 
+class AlertDialog extends Component{
+  render() {
+    return (
+        <div className="alert alert-warning" role="alert">
+          Nyeee negatív! ;(
+        </div>
+    );
+  }
+}
 class App extends Component<AppProps, AppState> {
-  readonly state: AppState = { counter: 0 };
-
+  readonly state: AppState = { counter: 0, alert: false};
   setCounterValue = (increase: boolean) => {
     this.setState(({ counter }) => {
-      const newValue = increase ? counter + 1 : counter - 1;
+      const attemptGoUnderZero = counter - 1 < 0;
+      const newValue = increase ? counter + 1 : attemptGoUnderZero ? 0 : counter - 1;
+
+      if(!increase && attemptGoUnderZero) {
+        this.setState(({alert}) => {
+          return { alert: true};
+        });
+      }
+      else if (increase && this.state.alert)
+      {
+        this.setState(({alert}) => {
+          return { alert: false};
+        });
+      }
+
       return { counter: newValue };
     });
   };
 
   clearValue = () => {
-    this.setState({ counter: 0 });
+    this.setState({ counter: 0, alert: false });
   };
 
   render() {
@@ -48,6 +74,12 @@ class App extends Component<AppProps, AppState> {
                 Clear
               </button>
             </div>
+            { this.state.alert ?
+                <div>
+                  <br/>
+                  <AlertDialog/>
+                </div> : <br/>
+            }
           </div>
         </div>
       </div>
