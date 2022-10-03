@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import BadgesPage from "./pages/BadgesPage/BadgesPage";
 import HomePage from "./pages/HomePage/HomePage";
+import UserPage from "./pages/UserPage/UserPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 
 interface AppProps {}
@@ -23,6 +24,7 @@ class App extends Component<AppProps, AppState> {
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/user/:id" element={<UserPage />} />
           <Route path="/badges" element={<BadgesPage />} />
 
           <Route path="*" element={<Navigate to="/home" replace />} />
