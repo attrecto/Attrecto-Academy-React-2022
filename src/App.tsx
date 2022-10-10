@@ -25,6 +25,7 @@ class App extends Component<AppProps, AppState> {
           <Route path="/home" element={<HomePage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/user/:id" element={<UserPage />} />
+          <Route path="/user" element={<UserPage />} />
           <Route path="/badges" element={<BadgesPage />} />
 
           <Route path="*" element={<Navigate to="/home" replace />} />

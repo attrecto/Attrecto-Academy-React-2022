@@ -1,5 +1,5 @@
 import request, { Methods } from "../util/request";
-import { UserModel } from "../models/user.model";
+import { UserFormValues, UserModel } from "../models/user.model";
 
 class UsersService {
   async getUsers() {
@@ -8,6 +8,26 @@ class UsersService {
 
   async getUser(id: string) {
     return request<UserModel>({ resource: `users/${id}`, method: Methods.GET });
+  }
+
+  async updateUser(id: string, data: UserFormValues) {
+    return request<UserModel>({
+      method: Methods.PATCH,
+      data,
+      resource: `users/${id}`,
+    });
+  }
+
+  async createUser(data: UserFormValues) {
+    return request<UserModel>({
+      method: Methods.POST,
+      data,
+      resource: "users",
+    });
+  }
+
+  async deleteUser(id: string) {
+    return request({ method: Methods.DELETE, resource: `users/${id}` });
   }
 }
 
