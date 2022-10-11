@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Button from "../../components/button/button";
+import Page from "../../components/page/page";
 
 interface HomePageProps {}
 interface HomePageState {
@@ -47,35 +48,37 @@ class HomePage extends Component<HomePageProps, HomePageState> {
     console.log("render");
 
     return (
-      <div className="container d-flex justify-content-center">
-        <div className="card my-4  p-4 bg-white shadow text-center">
-          {this.warnMessage === true && (
-            <div className="pb-2 text-warning">
-              Vigyázz! <br /> A számláló értéke nem lehet kisebb, mint 0!
+      <Page title="Home" noCard>
+        <div className="container d-flex justify-content-center">
+          <div className="card my-4  p-4 bg-white shadow text-center">
+            {this.warnMessage === true && (
+              <div className="pb-2 text-warning">
+                Vigyázz! <br /> A számláló értéke nem lehet kisebb, mint 0!
+              </div>
+            )}
+            <h5>Counter: {this.state.counter}</h5>
+            <div className="d-flex justify-content-center flex-wrap gap-2">
+              <Button
+                color="primary"
+                onClick={() => this.setCounterValue(true)}
+                className=""
+              >
+                Increase +
+              </Button>
+              <Button
+                color="secondary"
+                onClick={() => this.setCounterValue(false)}
+                className=""
+              >
+                Decrease -
+              </Button>
+              <Button color="danger" onClick={this.clearValue} className="">
+                Töröl
+              </Button>
             </div>
-          )}
-          <h5>Counter: {this.state.counter}</h5>
-          <div className="d-flex justify-content-center flex-wrap gap-2">
-            <Button
-              color="primary"
-              onClick={() => this.setCounterValue(true)}
-              className=""
-            >
-              Increase +
-            </Button>
-            <Button
-              color="secondary"
-              onClick={() => this.setCounterValue(false)}
-              className=""
-            >
-              Decrease -
-            </Button>
-            <Button color="danger" onClick={this.clearValue} className="">
-              Töröl
-            </Button>
           </div>
         </div>
-      </div>
+      </Page>
     );
   }
 }

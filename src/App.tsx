@@ -2,12 +2,13 @@ import { Component } from "react";
 import React from "react";
 
 import Navbar from "./components/navbar/Navbar";
-import Button from "./components/button/button";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
+import UsersPage from "./pages/UsersPage/UsersPage";
 import UserPage from "./pages/UserPage/UserPage";
 import BadgesPage from "./pages/BadgesPage/BadgesPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import UsersTable from "./pages/UsersTable/UsersTable";
 
 interface AppProps {}
 
@@ -29,9 +30,12 @@ class App extends Component<AppProps, AppState> {
             element={<Navigate to="/pagenotfound" replace={true} />}
           ></Route>
           <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/users" element={<UserPage />}></Route>
+          <Route path="/users" element={<UsersPage />}></Route>
           <Route path="/badges" element={<BadgesPage />} />
           <Route path="/pagenotfound" element={<NotFoundPage />} />
+          <Route path="/user/:id" element={<UserPage />} />
+          <Route path="/user" element={<UserPage />} />
+          <Route path="/userstable" element={<UsersTable />} />
 
           
         </Routes>
