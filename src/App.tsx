@@ -34,8 +34,6 @@ class App extends Component<AppProps, AppState> {
           <Route path="/pagenotfound" element={<NotFoundPage />} />
           <Route path="/user/:id" element={<UserPage />} />
           <Route path="/user" element={<UserPage />} />
-
-          
         </Routes>
       </div>
     );

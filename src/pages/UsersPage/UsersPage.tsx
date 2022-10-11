@@ -5,18 +5,27 @@ import Button from "../../components/button/button";
 import Page from "../../components/page/page";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { User } from "../../models/user.model";
+import { User, UserBadgeModel } from "../../models/user.model";
 import { usersService } from "../../services/users.services";
 import { Tabs, Tab } from "@material-ui/core";
 import MaterialTable from "material-table";
 
 import classes from "./users.module.scss";
+import { BadgeModel } from "../../models/badges.model";
+import { badgeServices } from "../../services/badges.service";
+import UserBadges from "../../components/userbadges/userbadges";
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const navigate = useNavigate();
+  const [badges, setBadges] = useState<BadgeModel[]>([]);
 
   useEffect(() => {
+    const fetchBadges = async () => {
+      setBadges(await badgeServices.getBadges());
+      console.log(badges);
+    };
+    fetchBadges();
     fetchUsers();
   }, []);
 
@@ -51,6 +60,16 @@ const UsersPage = () => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
     console.log(newValue);
+  };
+  const filterUserBadges = (userBadgesIds: UserBadgeModel[]): BadgeModel[] => {
+    let userBadges = [] as BadgeModel[];
+    userBadgesIds.forEach((b_Ids) => {
+      let f_badge = badges.find((b) => b.id === b_Ids.id);
+      if (f_badge) {
+        userBadges.push(f_badge);
+      }
+    });
+    return userBadges;
   };
 
   return (
@@ -128,6 +147,18 @@ const UsersPage = () => {
                 },
               },
             ]}
+            detailPanel={(rowData) => {
+              return (
+                <div>
+                  {rowData.badges && 
+                  <UserBadges
+                     badges={filterUserBadges(rowData.badges)}                   
+                  >
+                  </UserBadges>
+                  }
+                </div>
+              );
+            }}
           />
         </div>
       )}
