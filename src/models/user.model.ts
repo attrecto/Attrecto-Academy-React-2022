@@ -5,10 +5,10 @@ export interface UserBadgeModel{
 export interface User{
     name: string;
     id: number;
-    createAt: Date;
+    createdAt: Date;
     image: string;
     badges: UserBadgeModel [];
 }
 
 
-export interface UserFormValues extends Omit<User, "id" | "createAt"> {}
+export interface UserFormValues extends Omit<User, "id" | "createdAt"> {}

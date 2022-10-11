@@ -8,7 +8,6 @@ import UsersPage from "./pages/UsersPage/UsersPage";
 import UserPage from "./pages/UserPage/UserPage";
 import BadgesPage from "./pages/BadgesPage/BadgesPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import UsersTable from "./pages/UsersTable/UsersTable";
 
 interface AppProps {}
 
@@ -35,7 +34,6 @@ class App extends Component<AppProps, AppState> {
           <Route path="/pagenotfound" element={<NotFoundPage />} />
           <Route path="/user/:id" element={<UserPage />} />
           <Route path="/user" element={<UserPage />} />
-          <Route path="/userstable" element={<UsersTable />} />
 
           
         </Routes>

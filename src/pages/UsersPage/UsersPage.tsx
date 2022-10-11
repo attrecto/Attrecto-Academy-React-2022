@@ -7,16 +7,16 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User } from "../../models/user.model";
 import { usersService } from "../../services/users.services";
+import { Tabs, Tab } from "@material-ui/core";
+import MaterialTable from "material-table";
 
 import classes from "./users.module.scss";
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [selectedTab, setSelectedTab] = React.useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setUsers(await usersService.getUsers());
-    };
     fetchUsers();
   }, []);
 
@@ -29,48 +29,108 @@ const UsersPage = () => {
     await usersService.deleteUser(id);
     fetchUsers();
   };
-  const goToUSerPage = () => {
-    navigate("/user");
+
+  const goToUSerPage = (id?: string) => {
+    console.log("Asd");
+    if (id) {
+      navigate(`/user/${id}`);
+    } else {
+      navigate("/user");
+    }
+  };
+
+  const columns = [
+    { title: "Name", field: "name" },
+    {
+      title: "Create at",
+      field: "createdAt",
+      filtering: false,
+      render: (rowData: User) => new Date(rowData.createdAt).toLocaleString(),
+    },
+  ];
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setSelectedTab(newValue);
+    console.log(newValue);
   };
 
   return (
     <Page title="Users">
-      <div>UsersPage</div>
-      <div className="row">
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <Button className="w-100 mb-3" onClick={goToUSerPage}>
+      <div className="row justify-content-end">
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3 m-3 ">
+          <Button className="w-100 mb-3" onClick={() => goToUSerPage()}>
             Create User
           </Button>
         </div>
       </div>
-      <div className="row">
-        {users.map(({ id, image, name }) => (
-          <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3 my-1">
-            <Link
-              to={`/user/${id}`}
-              className={classNames("card", classes.UserCard)}
-            >
-              <img
-                src={image}
-                alt={`user #${id}`}
-                className={classNames(classes.UserImage, "card-img-top")}
-              />
-              <div className="card-body">
-                <h5>{name}</h5>
-              </div>
-              <Button
-                className={classes.DeleteIcon}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDeleteUser(id.toString());
-                }}
+      <Tabs value={selectedTab} onChange={handleChange}>
+        <Tab value={0} label="Tile" />
+        <Tab value={1} label="Table" />
+      </Tabs>
+      {selectedTab === 0 && (
+        <div className="row">
+          {users.map(({ id, image, name }) => (
+            <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3 my-1">
+              <Link
+                to={`/user/${id}`}
+                className={classNames("card", classes.UserCard)}
               >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Link>
-          </div>
-        ))}
-      </div>
+                <img
+                  src={image}
+                  alt={`user #${id}`}
+                  className={classNames(classes.UserImage, "card-img-top")}
+                />
+                <div className="card-body">
+                  <h5>{name}</h5>
+                </div>
+                <Button
+                  className={classes.DeleteIcon}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteUser(id.toString());
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+      {selectedTab === 1 && (
+        <div>
+          <MaterialTable
+            title=""
+            data={users}
+            columns={columns}
+            options={{
+              paging: false,
+              search: false,
+              filtering: true,
+              toolbar: false,
+            }}
+            actions={[
+              {
+                icon: "delete",
+                tooltip: "Delete User",
+                onClick: (event, rowData: User | User[]) => {
+                  if ("id" in rowData) {
+                    handleDeleteUser(rowData.id.toString());
+                  }
+                },
+              },
+              {
+                icon: "edit",
+                tooltip: "Edit User",
+                onClick: (event, rowData) => {
+                  if ("id" in rowData) {
+                    goToUSerPage(rowData.id.toString());
+                  }
+                },
+              },
+            ]}
+          />
+        </div>
+      )}
     </Page>
   );
 };
