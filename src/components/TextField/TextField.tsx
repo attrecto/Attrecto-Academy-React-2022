@@ -8,6 +8,7 @@ interface TextFieldProps {
 
 const TextFiled = ({label, name}: 
      TextFieldProps) => {
+      console.log(name);
   return (
      <div className="form-group">
       <label className="mb-1">{label}</label>

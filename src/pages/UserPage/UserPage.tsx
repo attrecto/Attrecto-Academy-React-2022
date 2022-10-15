@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
-import { NavigateProps,useNavigate, useParams } from "react-router-dom";
+import { NavigateProps, useNavigate, useParams } from "react-router-dom";
 import Page from "../../components/page/page";
 
-import { UserFormValues, User } from "../../models/user.model";
+import { UserFormValues, User, UserBadgeModel } from "../../models/user.model";
 import { usersService } from "../../services/users.services";
 import * as Yup from "yup";
 import TextField from "../../components/TextField/TextField";
 import Button from "../../components/button/button";
+import TagField from "../../components/tagField/tagField";
 
 const UserPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,44 +30,55 @@ const UserPage = () => {
   };
 
   const handleSubmit = async (values: UserFormValues) => {
-    if(user?.id){
+    if (user?.id) {
       await usersService.updateUSer(user.id.toString(), values);
-    }else{
+    } else {
       await usersService.createUser(values);
-      
     }
     goToUSersPage();
   };
 
-
-  const schema =Yup.object().shape(
-  {
+  const schema = Yup.object().shape({
     name: Yup.string().required(),
     image: Yup.string().required(),
-    badges: Yup.array()
-  }
-  );
+    badges: Yup.array(),
+  });
   const goToUSersPage = () => {
     navigate("/users");
   };
+
+  
   return (
     <Page title={user ? user.name : "User"}>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}
-      enableReinitialize
-      validationSchema={schema}
-      validateOnMount
-      validateOnChange
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        enableReinitialize
+        validationSchema={schema}
+        validateOnMount
+        validateOnChange
       >
         <Form>
           <TextField name="name" label="Name" />
           <TextField name="image" label="Avatar url" />
+          <TagField
+            name="badge"
+            label="badges"
+            options={initialValues.badges}
+          ></TagField>
           <div className="mt-3">
-            <Button color="secondary" type="button" className="me-2"  onClick={goToUSersPage}>
+            <Button
+              color="secondary"
+              type="button"
+              className="me-2"
+              onClick={goToUSersPage}
+            >
               Back
             </Button>
             <Button color="primary" type="submit" className="me-2">
               {id ? "Update" : "Crreate"}
             </Button>
+            
           </div>
         </Form>
       </Formik>

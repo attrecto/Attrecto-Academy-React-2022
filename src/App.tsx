@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component} from "react";
 import React from "react";
 
 import Navbar from "./components/navbar/Navbar";
@@ -12,10 +12,24 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 interface AppProps {}
 
 interface AppState {
-  counter: number;
+  isMobile: boolean;
 }
 
 class App extends Component<AppProps, AppState> {
+  //const [width, setWidth] = useState<number>(window.innerWidth);
+  readonly state: AppState = { isMobile: window.innerWidth <= 768};
+  componentDidMount(){
+    window.addEventListener('resize', this.windowsWidthChange);
+    return () => {
+      window.removeEventListener('resize', this.windowsWidthChange);
+  }
+  };
+
+ 
+  windowsWidthChange=() =>{
+    this.setState({ isMobile: window.innerWidth <= 768});
+
+  }
   render() {
     return (
       <div className="App">
@@ -29,7 +43,7 @@ class App extends Component<AppProps, AppState> {
             element={<Navigate to="/pagenotfound" replace={true} />}
           ></Route>
           <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/users" element={<UsersPage />}></Route>
+          <Route path="/users" element={<UsersPage isMobile={this.state.isMobile}/>}></Route>
           <Route path="/badges" element={<BadgesPage />} />
           <Route path="/pagenotfound" element={<NotFoundPage />} />
           <Route path="/user/:id" element={<UserPage />} />

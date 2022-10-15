@@ -14,7 +14,12 @@ import classes from "./users.module.scss";
 import { BadgeModel } from "../../models/badges.model";
 import { badgeServices } from "../../services/badges.service";
 import UserBadges from "../../components/userbadges/userbadges";
-const UsersPage = () => {
+
+interface UsersPageProps {
+  isMobile?: boolean;
+}
+
+const UsersPage = ({isMobile}:UsersPageProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const navigate = useNavigate();
@@ -23,7 +28,6 @@ const UsersPage = () => {
   useEffect(() => {
     const fetchBadges = async () => {
       setBadges(await badgeServices.getBadges());
-      console.log(badges);
     };
     fetchBadges();
     fetchUsers();
@@ -32,7 +36,6 @@ const UsersPage = () => {
   const fetchUsers = useCallback(async () => {
     setUsers(await usersService.getUsers());
   }, []);
-  console.log(users);
 
   const handleDeleteUser = async (id: string) => {
     await usersService.deleteUser(id);
@@ -59,7 +62,7 @@ const UsersPage = () => {
   ];
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
-    console.log(newValue);
+    
   };
   const filterUserBadges = (userBadgesIds: UserBadgeModel[]): BadgeModel[] => {
     let userBadges = [] as BadgeModel[];
@@ -81,11 +84,14 @@ const UsersPage = () => {
           </Button>
         </div>
       </div>
-      <Tabs value={selectedTab} onChange={handleChange}>
+      <Tabs value={selectedTab} onChange={handleChange} variant="fullWidth">
         <Tab value={0} label="Tile" />
+        {!isMobile &&(
         <Tab value={1} label="Table" />
+
+        )}
       </Tabs>
-      {selectedTab === 0 && (
+      { (selectedTab === 0 || isMobile) && (
         <div className="row">
           {users.map(({ id, image, name }) => (
             <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3 my-1">
@@ -115,7 +121,7 @@ const UsersPage = () => {
           ))}
         </div>
       )}
-      {selectedTab === 1 && (
+      {selectedTab === 1 && !isMobile && (
         <div>
           <MaterialTable
             title=""
