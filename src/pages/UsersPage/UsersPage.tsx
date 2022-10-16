@@ -7,23 +7,27 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User, UserBadgeModel } from "../../models/user.model";
 import { usersService } from "../../services/users.services";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, Divider } from "@material-ui/core";
 import MaterialTable from "material-table";
 
 import classes from "./users.module.scss";
 import { BadgeModel } from "../../models/badges.model";
 import { badgeServices } from "../../services/badges.service";
 import UserBadges from "../../components/userbadges/userbadges";
+import confirmModal from "../../components/confirmModal/confirmModal";
+import ConfirmModal from "../../components/confirmModal/confirmModal";
 
 interface UsersPageProps {
   isMobile?: boolean;
 }
 
-const UsersPage = ({isMobile}:UsersPageProps) => {
+const UsersPage = ({ isMobile }: UsersPageProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const navigate = useNavigate();
   const [badges, setBadges] = useState<BadgeModel[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToChange, setUserToChange] = useState<User>();
 
   useEffect(() => {
     const fetchBadges = async () => {
@@ -62,7 +66,6 @@ const UsersPage = ({isMobile}:UsersPageProps) => {
   ];
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
-    
   };
   const filterUserBadges = (userBadgesIds: UserBadgeModel[]): BadgeModel[] => {
     let userBadges = [] as BadgeModel[];
@@ -73,6 +76,17 @@ const UsersPage = ({isMobile}:UsersPageProps) => {
       }
     });
     return userBadges;
+  };
+
+  const openDeleteDialog = (user: User) => {
+    setUserToChange(user);
+    setDeleteDialogOpen(true);
+  };
+  const handleDialogReturn = (answear: boolean) => {
+    setDeleteDialogOpen(false);
+    if (answear && userToChange) {
+      handleDeleteUser(userToChange.id.toString());
+    }
   };
 
   return (
@@ -86,32 +100,32 @@ const UsersPage = ({isMobile}:UsersPageProps) => {
       </div>
       <Tabs value={selectedTab} onChange={handleChange} variant="fullWidth">
         <Tab value={0} label="Tile" />
-        {!isMobile &&(
-        <Tab value={1} label="Table" />
-
-        )}
+        {!isMobile && <Tab value={1} label="Table" />}
       </Tabs>
-      { (selectedTab === 0 || isMobile) && (
+      {(selectedTab === 0 || isMobile) && (
         <div className="row">
-          {users.map(({ id, image, name }) => (
-            <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3 my-1">
+          {users.map((user) => (
+            <div
+              key={user.id}
+              className="col-12 col-sm-6 col-md-4 col-lg-3 my-1"
+            >
               <Link
-                to={`/user/${id}`}
+                to={`/user/${user.id}`}
                 className={classNames("card", classes.UserCard)}
               >
                 <img
-                  src={image}
-                  alt={`user #${id}`}
+                  src={user.image}
+                  alt={`user #${user.id}`}
                   className={classNames(classes.UserImage, "card-img-top")}
                 />
                 <div className="card-body">
-                  <h5>{name}</h5>
+                  <h5>{user.name}</h5>
                 </div>
                 <Button
                   className={classes.DeleteIcon}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleDeleteUser(id.toString());
+                    openDeleteDialog(user);
                   }}
                 >
                   <FontAwesomeIcon icon={faTrash} />
@@ -139,7 +153,7 @@ const UsersPage = ({isMobile}:UsersPageProps) => {
                 tooltip: "Delete User",
                 onClick: (event, rowData: User | User[]) => {
                   if ("id" in rowData) {
-                    handleDeleteUser(rowData.id.toString());
+                    openDeleteDialog(rowData);
                   }
                 },
               },
@@ -156,18 +170,27 @@ const UsersPage = ({isMobile}:UsersPageProps) => {
             detailPanel={(rowData) => {
               return (
                 <div>
-                  {rowData.badges && 
-                  <UserBadges
-                     badges={filterUserBadges(rowData.badges)}                   
-                  >
-                  </UserBadges>
-                  }
+                  {rowData.badges && (
+                    <UserBadges
+                      badges={filterUserBadges(rowData.badges)}
+                    >
+                      
+                    </UserBadges>
+                  )}
                 </div>
               );
             }}
           />
         </div>
       )}
+      {deleteDialogOpen ? (
+        <ConfirmModal
+          show={true}
+          title={"Törlés megerősítése"}
+          content={`Biztosan törölni szeretnéd ezt a felhasználót: ${userToChange?.name}?`}
+          handleClose={handleDialogReturn}
+        />
+      ) : null}
     </Page>
   );
 };

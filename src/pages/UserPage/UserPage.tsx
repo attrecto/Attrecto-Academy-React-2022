@@ -76,7 +76,7 @@ const UserPage = () => {
               Back
             </Button>
             <Button color="primary" type="submit" className="me-2">
-              {id ? "Update" : "Crreate"}
+              {id ? "Update" : "Create"}
             </Button>
             
           </div>
