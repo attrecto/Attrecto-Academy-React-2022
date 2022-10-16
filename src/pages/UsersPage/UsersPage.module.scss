@@ -24,3 +24,34 @@
   height: 250px;
   object-fit: cover;
 }
+
+.UserListItem {
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+    background: whitesmoke;
+    text-decoration: none;
+  }
+
+  .DeleteIcon {
+    opacity: 0.5;
+    font-size: 12px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .UserListText {
+    vertical-align: middle;
+  }
+
+  .UserListDeleteBtn {
+    text-align: right;
+  }
+}
+
+.UserListImage {
+  height: 40px;
+  object-fit: cover;
+}
