@@ -6,13 +6,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Button from "../../components/button/Button";
 import Page from "../../components/page/Page";
+import BadgeImage from "../../components/badge-image/BadgeImage";
 import { UserModel } from "../../models/user.model";
 import { usersService } from "../../services/user.service";
+import { BadgeModel } from "../../models/badges.model";
+import { badgeService } from "../../services/badges.service";
 
 import classes from "./UsersPage.module.scss";
 
 const UsersPage = () => {
   const [users, setUsers] = useState<UserModel[]>([]);
+  const [badges, setBadges] = useState<BadgeModel[]>([]);
   const navigate = useNavigate();
 
   const fetchUsers = useCallback(async () => {
@@ -24,6 +28,13 @@ const UsersPage = () => {
       setUsers(await usersService.getUsers());
     };
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const fetchBadges = async () => {
+      setBadges(await badgeService.getBadges());
+    };
+    fetchBadges();
   }, []);
 
   const goToUserPage = () => {
@@ -45,7 +56,7 @@ const UsersPage = () => {
         </div>
       </div>
       <div className="row">
-        {users.map(({ id, image, name }) => (
+        {users.map(({ id, image, name, badges: userBadges }) => (
           <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3 my-1">
             <Link
               to={`/user/${id}`}
@@ -68,6 +79,20 @@ const UsersPage = () => {
               >
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
+              <div className={classes.Badges}>
+                {userBadges?.map((badge) => {
+                  const found = badges.find((item) => item.id === badge.id);
+
+                  return found ? (
+                    <BadgeImage
+                      small
+                      url={found.image}
+                      key={badge.id}
+                      className={classes.BadgeImage}
+                    />
+                  ) : null;
+                })}
+              </div>
             </Link>
           </div>
         ))}

@@ -18,6 +18,24 @@
       opacity: 1;
     }
   }
+
+  .Badges {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .BadgeImage {
+    transition: transform ease-in-out 0.25s;
+
+    &:hover {
+      transform: scale(1.85);
+    }
+  }
 }
 
 .UserImage {
