@@ -9,10 +9,14 @@ import * as Yup from "yup";
 import TextField from "../../components/TextField/TextField";
 import Button from "../../components/button/button";
 import TagField from "../../components/tagField/tagField";
+import { BadgeModel } from "../../models/badges.model";
+import { badgeServices } from "../../services/badges.service";
 
 const UserPage = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User>();
+  const [badges, setBadges] = useState<BadgeModel[]>([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +26,13 @@ const UserPage = () => {
       fetchUser(id);
     }
   }, [id]);
+
+  useEffect(() => {
+    const fetchBadges = async () => {
+      setBadges(await badgeServices.getBadges());
+    };
+    fetchBadges();
+  }, []);
 
   const initialValues: UserFormValues = {
     name: user?.name || "",
@@ -43,6 +54,7 @@ const UserPage = () => {
     image: Yup.string().required(),
     badges: Yup.array(),
   });
+
   const goToUSersPage = () => {
     navigate("/users");
   };
@@ -62,10 +74,11 @@ const UserPage = () => {
           <TextField name="name" label="Name" />
           <TextField name="image" label="Avatar url" />
           <TagField
-            name="badge"
-            label="badges"
-            options={initialValues.badges}
-          ></TagField>
+            name="badges"
+            label="Badges"
+            options={badges}
+            getLabel={({ name }) => name}
+          />
           <div className="mt-3">
             <Button
               color="secondary"

@@ -1,6 +1,6 @@
 
 export interface BadgeModel{
-    id: null;
+    id: number;
     name: string;
     image: string;
     description: string;

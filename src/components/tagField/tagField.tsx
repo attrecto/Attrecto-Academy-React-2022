@@ -1,35 +1,58 @@
-import { Field } from "formik";
+import { getByLabelText } from "@testing-library/react";
+import classNames from "classnames";
+import { Field, FieldProps } from "formik";
 import { ReactNode } from "react";
-
+import classes from "./tagField.module.scss";
 interface tagFieldProps<T> {
   label: string;
   name: string;
-  options: T[];
-  // getLabel: (item: T) => ReactNode;
+  options: T[]; // Generikus típus: Arra szolgál, h Minél rugalmasabb legyen.
+  getLabel: (item: T) => ReactNode;
 }
 
 const tagField = <T extends { id: string | number }>({
   name,
   label,
-  options
+  options,
+  getLabel,
 }: tagFieldProps<T>) => {
   return (
-    
     <div className="form-group">
-      
       <label>{label}</label>
-      {/* Csak néhány próbálgatás, formikkal */}
-      <Field as='select' name={name}  className="form-control">
-        {options.map(option=>{
-          return(
-            <option key={option.id} value={option.id}>
-              {option.id}
-            </option>
-          )
-        })}
+      <Field name={name} className="form-control">
         {/* {({form, field}): FieldProps<T>} */}
+        {({ form, field }: FieldProps<T[]>) => (
+          <div>
+            {options.map((option) => {
+              const isSelected = field.value?.find(
+                (item) => item.id === option.id
+              );
+
+              const handleClick = () =>
+                form.setFieldValue(
+                  name,
+                  isSelected
+                    ? field.value?.filter((item) => item.id !== option.id)
+                    : [...field.value, { id: option.id }]
+                );
+
+              return (
+                <span
+                  key={option.id}
+                  onClick={handleClick}
+                  className={classNames(
+                    classes.Tag,
+                    "badge me-3 mb-1 p-2",
+                    isSelected ? "bg-success" : "bg-light text-dark"
+                  )}
+                >
+                  {getLabel(option)}
+                </span>
+              );
+            })}
+          </div>
+        )}
       </Field>
-        
     </div>
   );
 };

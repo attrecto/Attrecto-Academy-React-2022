@@ -14,8 +14,8 @@ import classes from "./users.module.scss";
 import { BadgeModel } from "../../models/badges.model";
 import { badgeServices } from "../../services/badges.service";
 import UserBadges from "../../components/userbadges/userbadges";
-import confirmModal from "../../components/confirmModal/confirmModal";
 import ConfirmModal from "../../components/confirmModal/confirmModal";
+import BadgeImage from "../../components/badge-image/BadgeImage";
 
 interface UsersPageProps {
   isMobile?: boolean;
@@ -130,6 +130,19 @@ const UsersPage = ({ isMobile }: UsersPageProps) => {
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
+                <div className={classes.Badges}>
+                {user.badges?.map((badge) => {
+                  const found = badges.find((item) => item.id === badge.id);
+                  return found ? (
+                    <BadgeImage
+                      small
+                      url={found.image}
+                      key={badge.id}
+                      className={classes.BadgeImage}
+                    />
+                  ) : null;
+                })}
+              </div>
               </Link>
             </div>
           ))}
@@ -172,8 +185,7 @@ const UsersPage = ({ isMobile }: UsersPageProps) => {
                 <div>
                   {rowData.badges && (
                     <UserBadges
-                      badges={filterUserBadges(rowData.badges)}
-                    >
+                      badges={filterUserBadges(rowData.badges)}                   >
                       
                     </UserBadges>
                   )}
