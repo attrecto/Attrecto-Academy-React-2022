@@ -16,6 +16,11 @@ const UserPage = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User>();
   const [badges, setBadges] = useState<BadgeModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const setLoading=(newValue:boolean)=> { // Paraméterként átadni egy komponensnek, ha valamilyen API hívást csinálna
+    setIsLoading(newValue);
+  };
 
   const navigate = useNavigate();
 
@@ -61,7 +66,7 @@ const UserPage = () => {
 
   
   return (
-    <Page title={user ? user.name : "User"}>
+    <Page title={user ? user.name : "User"} isLoading={isLoading}>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}

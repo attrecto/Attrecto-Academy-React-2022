@@ -28,10 +28,16 @@ const UsersPage = ({ isMobile }: UsersPageProps) => {
   const [badges, setBadges] = useState<BadgeModel[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToChange, setUserToChange] = useState<User>();
-
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const setLoading=(newValue:boolean)=> {
+    setIsLoading(newValue);
+  };
   useEffect(() => {
+    setLoading(true);
     const fetchBadges = async () => {
       setBadges(await badgeServices.getBadges());
+      setLoading(false);
     };
     fetchBadges();
     fetchUsers();
@@ -90,7 +96,7 @@ const UsersPage = ({ isMobile }: UsersPageProps) => {
   };
 
   return (
-    <Page title="Users">
+    <Page title="Users" isLoading={isLoading}>
       <div className="row justify-content-end">
         <div className="col-12 col-sm-6 col-md-4 col-lg-3 m-3 ">
           <Button className="w-100 mb-3" onClick={() => goToUSerPage()}>

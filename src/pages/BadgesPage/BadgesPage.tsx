@@ -8,6 +8,11 @@ import { badgeServices } from "../../services/badges.service";
 import classes from "./Badges.module.scss";
 const BadgesPage = () => {
   const [badges, setBadges] = useState<BadgeModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const setLoading=(newValue:boolean)=> {
+    setIsLoading(newValue);
+  };
   useEffect(() => {
     const fetchBadges = async () => {
       setBadges(await badgeServices.getBadges());
@@ -17,7 +22,7 @@ const BadgesPage = () => {
   }, []);
 
   return (
-    <Page title="Badges">
+    <Page title="Badges" isLoading={isLoading}>
       
       <UserBadges badges={badges}>
         
