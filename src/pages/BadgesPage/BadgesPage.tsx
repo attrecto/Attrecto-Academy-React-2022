@@ -10,17 +10,20 @@ import classes from "./Badges.module.scss";
 
 const BadgesPage = () => {
   const [badges, setBadges] = useState<BadgeModel[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchBadges = async () => {
       setBadges(await badgeService.getBadges());
+      setLoading(false);
     };
 
     fetchBadges();
   }, []);
 
   return (
-    <Page title="Badges">
+    <Page title="Badges" loading={loading}>
       <div className="row">
         {badges.map((badge) => (
           <div key={badge.id} className="col-lg-4 col-md-6 col-sm-12">
