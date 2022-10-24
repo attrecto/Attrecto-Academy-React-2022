@@ -20,6 +20,43 @@
   }
 }
 
+.TableUser {
+  text-decoration: none;
+  height: 100px;
+  float: left;
+  width: 100%;
+
+  &:hover {
+    cursor: pointer;
+    background: whitesmoke;
+    text-decoration: none;
+  }
+
+  .TableName {
+    float: right;
+  }
+
+  .DeleteIcon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 0.5;
+    float: right;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .TableUserImage {
+    height: 100px;
+    width: 100px;
+    float: left;
+
+  }
+}
+
+
 .UserImage {
   height: 250px;
   object-fit: cover;
