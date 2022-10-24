@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { Field, FieldProps } from "formik";
 import classNames from "classnames";
 
+import BaseField from "../base-field/BaseField";
+
 import classes from "./TagField.module.scss";
 
 interface TagFieldProps<T> {
@@ -18,8 +20,7 @@ const TagField = <T extends { id: string | number }>({
   getLabel,
 }: TagFieldProps<T>) => {
   return (
-    <div className="form-group">
-      <label>{label}</label>
+    <BaseField name={name} label={label}>
       <Field name={name} className="form-control">
         {({ form, field }: FieldProps<T[]>) => (
           <div>
@@ -53,7 +54,7 @@ const TagField = <T extends { id: string | number }>({
           </div>
         )}
       </Field>
-    </div>
+    </BaseField>
   );
 };
 

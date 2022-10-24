@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import classNames from "classnames";
 
 import Page from "../../components/page/Page";
+import Badge from "../../components/badge/Badge";
 import { BadgeModel } from "../../models/badges.model";
 import { badgeService } from "../../services/badges.service";
-import Badge from "../../components/badge/Badge";
-
-import classes from "./Badges.module.scss";
 
 const BadgesPage = () => {
   const [badges, setBadges] = useState<BadgeModel[]>([]);

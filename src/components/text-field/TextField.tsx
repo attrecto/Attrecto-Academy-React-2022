@@ -1,17 +1,25 @@
 import React from "react";
 import { Field } from "formik";
 
+import BaseField from "../base-field/BaseField";
+
 interface TextFieldProps {
   label: string;
   name: string;
+  type?: string;
+  className?: string;
 }
 
-const TextField = ({ name, label }: TextFieldProps) => {
+const TextField = ({
+  name,
+  label,
+  type = "text",
+  className,
+}: TextFieldProps) => {
   return (
-    <div className="form-group">
-      <label className="mb-1">{label}</label>
-      <Field name={name} type="text" className="form-control" />
-    </div>
+    <BaseField className={className} name={name} label={label}>
+      <Field name={name} type={type} className="form-control" />
+    </BaseField>
   );
 };
 
