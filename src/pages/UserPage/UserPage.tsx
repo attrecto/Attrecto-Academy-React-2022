@@ -25,16 +25,20 @@ const UserPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     const fetchUser = async (id: string) =>
       setUser(await usersService.getUser(id));
+      setLoading(false);
     if (id) {
       fetchUser(id);
     }
   }, [id]);
 
   useEffect(() => {
+    setLoading(true);
     const fetchBadges = async () => {
       setBadges(await badgeServices.getBadges());
+      setLoading(false);
     };
     fetchBadges();
   }, []);

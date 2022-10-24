@@ -14,8 +14,11 @@ const BadgesPage = () => {
     setIsLoading(newValue);
   };
   useEffect(() => {
+    setLoading(true);
     const fetchBadges = async () => {
+
       setBadges(await badgeServices.getBadges());
+      setLoading(false);
       console.log(badges);
     };
     fetchBadges();
